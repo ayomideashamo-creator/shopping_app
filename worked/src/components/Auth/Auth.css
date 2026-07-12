@@ -1,0 +1,130 @@
+.auth-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #a5c9a0 0%, #c89968 100%);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+}
+
+.auth-container {
+  width: 100%;
+  max-width: 400px;
+  padding: 20px;
+}
+
+.auth-box {
+  background: white;
+  border-radius: 12px;
+  padding: 40px 30px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+}
+
+.auth-box h1 {
+  font-size: 32px;
+  margin: 0 0 8px 0;
+  text-align: center;
+  font-family: 'Special Elite', serif;
+  color: #2a2520;
+}
+
+.auth-tagline {
+  text-align: center;
+  color: #888;
+  font-size: 14px;
+  margin: 0 0 30px 0;
+  font-style: italic;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-group label {
+  font-weight: 600;
+  font-size: 14px;
+  color: #2a2520;
+}
+
+.form-group input {
+  padding: 12px;
+  border: 1px solid #d4ccc1;
+  border-radius: 6px;
+  font-size: 14px;
+  font-family: inherit;
+  transition: all 0.2s;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #c89968;
+  box-shadow: 0 0 0 3px rgba(200, 153, 104, 0.1);
+}
+
+.form-group input:disabled {
+  background-color: #f5f1eb;
+  cursor: not-allowed;
+}
+
+.auth-error {
+  background-color: #fee;
+  color: #c33;
+  padding: 12px;
+  border-radius: 6px;
+  font-size: 14px;
+  border-left: 4px solid #c33;
+}
+
+.auth-button {
+  padding: 12px;
+  background: #a5c9a0;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.auth-button:hover:not(:disabled) {
+  background: #92b88f;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(165, 201, 160, 0.3);
+}
+
+.auth-button:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.auth-demo {
+  margin-top: 30px;
+  padding-top: 30px;
+  border-top: 1px solid #e8e1d9;
+  text-align: center;
+}
+
+.auth-demo p {
+  font-size: 12px;
+  color: #888;
+  margin: 0 0 8px 0;
+}
+
+.auth-demo code {
+  background: #f5f1eb;
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-size: 12px;
+  display: block;
+  font-family: 'Courier New', monospace;
+  color: #2a2520;
+}

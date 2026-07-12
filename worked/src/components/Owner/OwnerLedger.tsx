@@ -1,119 +1,124 @@
 import { useState } from 'react';
-import { ShopItem } from '../../types';
-import { escapeHtml } from '../../storage';
+import { useShopItemsSupabase } from '../../hooks/useShopItemsSupabase';
 
 interface OwnerLedgerProps {
-  items: ShopItem[];
-  onAddItem: (name: string, price: number, stock: number) => Promise<void>;
-  onRemoveItem: (itemId: string) => Promise<void>;
-  onUpdateItem: (itemId: string, field: keyof ShopItem, value: any) => Promise<void>;
-  error: string | null;
+  ownerId: string;
 }
 
-export default function OwnerLedger({
-  items,
-  onAddItem,
-  onRemoveItem,
-  onUpdateItem,
-  error,
-}: OwnerLedgerProps) {
+export default function OwnerLedger({ ownerId }: OwnerLedgerProps) {
+  const { items, loading, error, addItem, updateItem, removeItem } = useShopItemsSupabase(ownerId);
   const [newItemName, setNewItemName] = useState('');
   const [newItemPrice, setNewItemPrice] = useState('');
   const [newItemStock, setNewItemStock] = useState('');
+  const [isAdding, setIsAdding] = useState(false);
 
   const handleAddItem = async () => {
-    const name = newItemName.trim();
-    const price = parseFloat(newItemPrice);
-    const stock = parseInt(newItemStock, 10);
+    if (!newItemName.trim() || !newItemPrice || !newItemStock) {
+      alert('Please fill in all fields');
+      return;
+    }
 
-    await onAddItem(name, price, stock);
+    setIsAdding(true);
+    const success = await addItem(
+      newItemName.trim(),
+      parseFloat(newItemPrice),
+      parseInt(newItemStock, 10)
+    );
 
-    setNewItemName('');
-    setNewItemPrice('');
-    setNewItemStock('');
+    if (success) {
+      setNewItemName('');
+      setNewItemPrice('');
+      setNewItemStock('');
+    }
+    setIsAdding(false);
   };
 
-  return (
-    <div>
-      <table className="ledger">
-        <thead>
-          <tr>
-            <th>Item</th>
-            <th>Price</th>
-            <th>Stock</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          {items.length === 0 ? (
-            <tr>
-              <td colSpan={4} className="empty-note">
-                The shelf is bare — add an item below to stock it.
-              </td>
-            </tr>
-          ) : (
-            items.map((item) => (
-              <tr key={item.id}>
-                <td>
-                  <input
-                    value={item.name}
-                    onChange={(e) => onUpdateItem(item.id, 'name', e.target.value)}
-                  />
-                </td>
-                <td>
-                  <input
-                    type="number"
-                    step="0.01"
-                    min="0"
-                    value={item.price}
-                    onChange={(e) => onUpdateItem(item.id, 'price', e.target.value)}
-                  />
-                </td>
-                <td>
-                  <input
-                    type="number"
-                    min="0"
-                    value={item.stock}
-                    onChange={(e) => onUpdateItem(item.id, 'stock', e.target.value)}
-                  />
-                </td>
-                <td>
-                  <button className="remove-x" onClick={() => onRemoveItem(item.id)} title="Remove item">
-                    ×
-                  </button>
-                </td>
-              </tr>
-            ))
-          )}
-        </tbody>
-      </table>
+  if (loading) {
+    return <div className="ledger-container">Loading inventory...</div>;
+  }
 
-      <div className="add-row">
-        <input
-          type="text"
-          placeholder="Item name"
-          value={newItemName}
-          onChange={(e) => setNewItemName(e.target.value)}
-        />
-        <input
-          type="number"
-          step="0.01"
-          min="0"
-          placeholder="Price"
-          value={newItemPrice}
-          onChange={(e) => setNewItemPrice(e.target.value)}
-        />
-        <input
-          type="number"
-          min="0"
-          placeholder="Stock"
-          value={newItemStock}
-          onChange={(e) => setNewItemStock(e.target.value)}
-        />
-        <button onClick={handleAddItem}>Add item</button>
+  return (
+    <div className="ledger-container">
+      <div className="ledger-section">
+        <h3>Add New Item</h3>
+        <div className="ledger-form">
+          <input
+            type="text"
+            placeholder="Item name"
+            value={newItemName}
+            onChange={(e) => setNewItemName(e.target.value)}
+            disabled={isAdding}
+          />
+          <input
+            type="number"
+            placeholder="Price"
+            value={newItemPrice}
+            onChange={(e) => setNewItemPrice(e.target.value)}
+            disabled={isAdding}
+            step="0.01"
+          />
+          <input
+            type="number"
+            placeholder="Stock quantity"
+            value={newItemStock}
+            onChange={(e) => setNewItemStock(e.target.value)}
+            disabled={isAdding}
+          />
+          <button onClick={handleAddItem} disabled={isAdding}>
+            {isAdding ? 'Adding...' : 'Add Item'}
+          </button>
+        </div>
+        {error && <div className="ledger-error">{error}</div>}
       </div>
 
-      {error && <div className="note error">{escapeHtml(error)}</div>}
+      <div className="ledger-section">
+        <h3>Current Inventory</h3>
+        {items.length === 0 ? (
+          <p className="ledger-empty">No items yet. Add your first item above.</p>
+        ) : (
+          <div className="ledger-table">
+            <div className="ledger-header">
+              <div>Item Name</div>
+              <div>Price</div>
+              <div>Stock</div>
+              <div>Reserved</div>
+              <div>Actions</div>
+            </div>
+            {items.map((item) => (
+              <div key={item.id} className="ledger-row">
+                <div className="ledger-cell">
+                  <input
+                    type="text"
+                    value={item.name}
+                    onChange={(e) => updateItem(item.id, 'name', e.target.value)}
+                  />
+                </div>
+                <div className="ledger-cell">
+                  <input
+                    type="number"
+                    value={item.price}
+                    onChange={(e) => updateItem(item.id, 'price', e.target.value)}
+                    step="0.01"
+                  />
+                </div>
+                <div className="ledger-cell">
+                  <input
+                    type="number"
+                    value={item.stock}
+                    onChange={(e) => updateItem(item.id, 'stock', e.target.value)}
+                  />
+                </div>
+                <div className="ledger-cell">{item.reservedStock}</div>
+                <div className="ledger-cell actions">
+                  <button onClick={() => removeItem(item.id)} className="btn-delete">
+                    Delete
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 }

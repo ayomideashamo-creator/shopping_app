@@ -1,79 +1,101 @@
-import { Order } from '../../types';
-import { escapeHtml } from '../../storage';
+import { useState } from 'react';
+import { useShopOrdersSupabase } from '../../hooks/useShopOrdersSupabase';
+import Receipt from './Receipt';
+import './Owner.css';
 
 interface OwnerTicketsProps {
-  orders: Order[];
-  onMarkFulfilled: (orderId: string) => Promise<void>;
-  onOpenReceipt: (orderId: string) => void;
-  onClearAll: () => Promise<void>;
+  ownerId: string;
 }
 
-function formatMoney(n: number): string {
-  return '₦' + Number(n).toFixed(2);
-}
+export default function OwnerTickets({ ownerId }: OwnerTicketsProps) {
+  const { orders, loading, error, markFulfilled, clearAllOrders } = useShopOrdersSupabase(ownerId);
+  const [selectedOrder, setSelectedOrder] = useState<string | null>(null);
 
-export default function OwnerTickets({
-  orders,
-  onMarkFulfilled,
-  onOpenReceipt,
-  onClearAll,
-}: OwnerTicketsProps) {
-  if (orders.length === 0) {
-    return <div className="empty-note">No tickets yet — orders sent by customers will land here.</div>;
+  const pendingOrders = orders.filter((o) => o.status === 'pending');
+  const fulfilledOrders = orders.filter((o) => o.status === 'fulfilled');
+
+  const handleMarkFulfilled = async (orderId: string) => {
+    await markFulfilled(orderId);
+  };
+
+  const handleClearAll = async () => {
+    if (window.confirm('Clear all orders? This cannot be undone.')) {
+      await clearAllOrders();
+    }
+  };
+
+  if (loading) {
+    return <div className="tickets-container">Loading orders...</div>;
   }
 
-  const sorted = [...orders].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+  if (selectedOrder) {
+    const order = orders.find((o) => o.id === selectedOrder);
+    if (order) {
+      return (
+        <div className="tickets-container">
+          <button onClick={() => setSelectedOrder(null)} className="btn-back">
+            ← Back to Tickets
+          </button>
+          <Receipt order={order} />
+        </div>
+      );
+    }
+  }
 
   return (
-    <div>
-      <div style={{ textAlign: 'right', marginBottom: '10px' }}>
-        <button className="btn-outline" onClick={onClearAll}>
-          Clear all tickets
-        </button>
+    <div className="tickets-container">
+      <div className="tickets-header">
+        <h3>Incoming Tickets ({pendingOrders.length})</h3>
+        {orders.length > 0 && (
+          <button onClick={handleClearAll} className="btn-clear">
+            Clear All
+          </button>
+        )}
       </div>
 
-      {sorted.map((order) => {
-        const stampColor = order.status === 'fulfilled' ? 'var(--mint)' : 'var(--brass)';
-        return (
-          <div key={order.id} className="ticket-stub">
-            <div className="stub-left">
-              <div className="stub-customer">
-                {escapeHtml(order.customerName)}{' '}
-                <span className="ledger-num" style={{ color: '#8a8273', fontSize: '12px' }}>
-                  {order.ticketNumber}
-                </span>
-              </div>
-              <div className="stub-meta">{new Date(order.createdAt).toLocaleString()}</div>
-              <div className="stub-items">
-                {order.items.map((item, idx) => (
-                  <div key={idx} className="row">
-                    <span>
-                      {item.qty}× {escapeHtml(item.name)}
-                    </span>
-                    <span>{formatMoney(item.price * item.qty)}</span>
-                  </div>
-                ))}
-              </div>
-              <div className="stub-total">Total: {formatMoney(order.total)}</div>
-            </div>
-            <div className="stub-right">
-              <span className="stamp" style={{ color: stampColor, borderColor: stampColor }}>
-                {order.status}
-              </span>
-              <div className="stub-actions">
-                <button className="btn-outline" onClick={() => onOpenReceipt(order.id)}>
-                  Print Receipt
+      {error && <div className="tickets-error">{error}</div>}
+
+      {pendingOrders.length === 0 ? (
+        <p className="tickets-empty">No pending orders</p>
+      ) : (
+        <div className="tickets-grid">
+          {pendingOrders.map((order) => (
+            <div key={order.id} className="ticket-card pending">
+              <div className="ticket-number">{order.ticketNumber}</div>
+              <div className="ticket-customer">{order.customerName}</div>
+              <div className="ticket-items">{order.items.length} item(s)</div>
+              <div className="ticket-total">₦{order.total.toFixed(2)}</div>
+              <div className="ticket-actions">
+                <button onClick={() => setSelectedOrder(order.id)} className="btn-view">
+                  View
                 </button>
-                {order.status === 'pending' && (
-                  <button className="btn-fill" onClick={() => onMarkFulfilled(order.id)}>
-                    Mark Fulfilled
-                  </button>
-                )}
+                <button
+                  onClick={() => handleMarkFulfilled(order.id)}
+                  className="btn-fulfill"
+                >
+                  ✓ Done
+                </button>
               </div>
             </div>
+          ))}
+        </div>
+      )}
+
+      {fulfilledOrders.length > 0 && (
+        <>
+          <h3 style={{ marginTop: '40px' }}>Fulfilled ({fulfilledOrders.length})</h3>
+          <div className="tickets-grid">
+            {fulfilledOrders.map((order) => (
+              <div key={order.id} className="ticket-card fulfilled">
+                <div className="ticket-number">{order.ticketNumber}</div>
+                <div className="ticket-customer">{order.customerName}</div>
+                <div className="ticket-items">{order.items.length} item(s)</div>
+                <div className="ticket-total">₦{order.total.toFixed(2)}</div>
+              </div>
+            ))}
           </div>
-        );
-      })}
+        </>
+      )}
     </div>
   );
 }
