@@ -1,0 +1,467 @@
+.owner-dashboard {
+  min-height: 100vh;
+  background: #f5f1eb;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+}
+
+.owner-header {
+  background: white;
+  padding: 20px 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid #e8e1d9;
+}
+
+.owner-title {
+  font-size: 24px;
+  font-weight: bold;
+  font-family: 'Special Elite', serif;
+  color: #2a2520;
+}
+
+.owner-user {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.owner-email {
+  font-size: 14px;
+  color: #666;
+}
+
+.btn-logout {
+  padding: 8px 16px;
+  background: #ccc;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.2s;
+}
+
+.btn-logout:hover {
+  background: #bbb;
+}
+
+.owner-tabs {
+  display: flex;
+  gap: 0;
+  padding: 0 30px;
+  border-bottom: 1px solid #d4ccc1;
+  background: white;
+}
+
+.owner-tab {
+  padding: 16px 24px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  color: #888;
+  border-bottom: 3px solid transparent;
+  transition: all 0.2s;
+}
+
+.owner-tab.active {
+  color: #c89968;
+  border-bottom-color: #c89968;
+}
+
+.owner-tab:hover {
+  color: #2a2520;
+}
+
+.owner-content {
+  padding: 30px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Ledger Styles */
+.ledger-container {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 40px;
+}
+
+.ledger-section {
+  background: white;
+  border-radius: 8px;
+  padding: 30px;
+  border: 1px solid #e8e1d9;
+}
+
+.ledger-section h3 {
+  margin: 0 0 20px 0;
+  font-size: 18px;
+  color: #2a2520;
+}
+
+.ledger-form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.ledger-form input {
+  padding: 10px;
+  border: 1px solid #d4ccc1;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.ledger-form button {
+  padding: 10px 20px;
+  background: #a5c9a0;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.ledger-form button:hover:not(:disabled) {
+  background: #92b88f;
+}
+
+.ledger-form button:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.ledger-error {
+  color: #c33;
+  padding: 12px;
+  background: #fee;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.ledger-empty {
+  color: #999;
+  font-style: italic;
+}
+
+.ledger-table {
+  border: 1px solid #d4ccc1;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.ledger-header {
+  display: grid;
+  grid-template-columns: 2fr 1.5fr 1fr 1.5fr 1fr;
+  gap: 12px;
+  padding: 12px;
+  background: #f5f1eb;
+  font-weight: 600;
+  font-size: 13px;
+  color: #2a2520;
+  border-bottom: 2px solid #d4ccc1;
+}
+
+.ledger-row {
+  display: grid;
+  grid-template-columns: 2fr 1.5fr 1fr 1.5fr 1fr;
+  gap: 12px;
+  padding: 12px;
+  border-bottom: 1px solid #e8e1d9;
+  align-items: center;
+}
+
+.ledger-row:last-child {
+  border-bottom: none;
+}
+
+.ledger-cell {
+  font-size: 14px;
+}
+
+.ledger-cell input {
+  width: 100%;
+  padding: 6px;
+  border: 1px solid #d4ccc1;
+  border-radius: 4px;
+  font-size: 13px;
+}
+
+.ledger-cell.actions {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-delete {
+  padding: 6px 12px;
+  background: #e53e3e;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  transition: background 0.2s;
+}
+
+.btn-delete:hover {
+  background: #c53030;
+}
+
+/* Tickets Styles */
+.tickets-container {
+  padding: 20px 0;
+}
+
+.tickets-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.tickets-header h3 {
+  margin: 0;
+  font-size: 18px;
+  color: #2a2520;
+}
+
+.btn-clear {
+  padding: 8px 16px;
+  background: #e53e3e;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.2s;
+}
+
+.btn-clear:hover {
+  background: #c53030;
+}
+
+.tickets-error {
+  color: #c33;
+  padding: 12px;
+  background: #fee;
+  border-radius: 4px;
+  margin-bottom: 20px;
+}
+
+.tickets-empty {
+  text-align: center;
+  padding: 40px 20px;
+  color: #999;
+  font-style: italic;
+}
+
+.tickets-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.ticket-card {
+  background: white;
+  border: 2px solid #d4ccc1;
+  border-radius: 8px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ticket-card.pending {
+  border-color: #c89968;
+  box-shadow: 0 2px 8px rgba(200, 153, 104, 0.1);
+}
+
+.ticket-card.fulfilled {
+  opacity: 0.7;
+  border-color: #a5c9a0;
+}
+
+.ticket-number {
+  font-size: 32px;
+  font-weight: 700;
+  color: #c89968;
+  text-align: center;
+}
+
+.ticket-customer {
+  font-weight: 600;
+  text-align: center;
+  color: #2a2520;
+}
+
+.ticket-items {
+  font-size: 13px;
+  color: #666;
+  text-align: center;
+}
+
+.ticket-total {
+  font-size: 16px;
+  font-weight: 700;
+  color: #2a2520;
+  text-align: center;
+}
+
+.ticket-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-view,
+.btn-fulfill {
+  flex: 1;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 13px;
+  transition: all 0.2s;
+}
+
+.btn-view {
+  background: #d4ccc1;
+  color: #2a2520;
+}
+
+.btn-view:hover {
+  background: #c4bbb0;
+}
+
+.btn-fulfill {
+  background: #a5c9a0;
+  color: white;
+}
+
+.btn-fulfill:hover {
+  background: #92b88f;
+}
+
+.btn-back {
+  margin-bottom: 20px;
+  padding: 8px 16px;
+  background: #d4ccc1;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.2s;
+}
+
+.btn-back:hover {
+  background: #c4bbb0;
+}
+
+/* Receipt Styles */
+.receipt {
+  background: white;
+  border: 1px solid #d4ccc1;
+  border-radius: 8px;
+  padding: 40px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.receipt-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.receipt-header h2 {
+  margin: 0 0 10px 0;
+  font-size: 24px;
+  color: #2a2520;
+}
+
+.receipt-ticket {
+  font-size: 28px;
+  font-weight: 700;
+  color: #c89968;
+  font-family: 'Courier New', monospace;
+}
+
+.receipt-customer {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #e8e1d9;
+}
+
+.receipt-label {
+  font-weight: 600;
+  color: #2a2520;
+}
+
+.receipt-value {
+  color: #666;
+}
+
+.receipt-time {
+  text-align: center;
+  font-size: 12px;
+  color: #999;
+  margin-bottom: 20px;
+}
+
+.receipt-items {
+  margin: 30px 0;
+}
+
+.receipt-items-header {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 10px;
+  padding: 10px 0;
+  border-bottom: 2px solid #d4ccc1;
+  font-weight: 600;
+  font-size: 13px;
+  color: #2a2520;
+}
+
+.receipt-item-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 10px;
+  padding: 8px 0;
+  border-bottom: 1px solid #e8e1d9;
+  font-size: 13px;
+}
+
+.receipt-total {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px 0;
+  border-top: 2px solid #d4ccc1;
+  border-bottom: 2px solid #d4ccc1;
+  margin: 20px 0;
+}
+
+.receipt-total-label {
+  font-weight: 700;
+  font-size: 16px;
+  color: #2a2520;
+}
+
+.receipt-total-value {
+  font-weight: 700;
+  font-size: 16px;
+  color: #c89968;
+}
+
+.receipt-status {
+  text-align: center;
+  padding: 15px 0;
+  font-size: 14px;
+  color: #666;
+}
